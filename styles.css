@@ -1,0 +1,170 @@
+.fraction-calculator {
+    max-width: 980px;
+    margin: 0 auto;
+}
+
+.fraction-tool-note {
+    margin: 0 0 1rem;
+    color: var(--bs-secondary-color, #5c6670);
+}
+
+.fraction-section {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .75rem;
+    background: var(--bs-body-bg, #fff);
+}
+
+.fraction-section h3,
+.fraction-card h4 {
+    margin-top: 0;
+}
+
+.fraction-input-row,
+.fraction-pair-grid,
+.fraction-convert-grid {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.fraction-field {
+    display: grid;
+    gap: .35rem;
+    min-width: 130px;
+}
+
+.fraction-field span {
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+.fraction-slash,
+.fraction-operator {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.fraction-pair-grid {
+    justify-content: flex-start;
+}
+
+.fraction-card {
+    border: 1px solid var(--bs-border-color, #dee2e6);
+    border-radius: .65rem;
+    padding: 1rem;
+    min-width: 180px;
+}
+
+fieldset.fraction-card legend {
+    width: auto;
+    float: none;
+    margin: 0 0 .75rem;
+    padding: 0;
+    font-size: .9rem;
+    font-weight: 700;
+}
+
+.fraction-stacked-input {
+    display: inline-grid;
+    grid-template-columns: 110px;
+    gap: .3rem;
+    justify-items: stretch;
+}
+
+.fraction-stacked-input span {
+    height: 2px;
+    background: currentColor;
+}
+
+.fraction-stacked-input-small {
+    grid-template-columns: 130px;
+}
+
+.fraction-operation-tabs {
+    display: flex;
+    gap: .5rem;
+    margin-bottom: 1rem;
+}
+
+.fraction-operation-tabs .active {
+    box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.fraction-result {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: .6rem;
+    background: var(--bs-tertiary-bg, #f5f6f7);
+}
+
+.fraction-result:empty {
+    display: none;
+}
+
+.fraction-answer {
+    display: flex;
+    align-items: baseline;
+    gap: .5rem;
+    margin-bottom: .75rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.fraction-answer-value {
+    font-size: 1.55rem;
+}
+
+.fraction-steps-title {
+    margin: .75rem 0 .35rem;
+    font-size: .95rem;
+    font-weight: 700;
+}
+
+.fraction-steps {
+    margin: 0;
+    padding-left: 1.3rem;
+}
+
+.fraction-steps li + li {
+    margin-top: .35rem;
+}
+
+.fraction-error {
+    font-weight: 600;
+}
+
+.fraction-convert-grid {
+    align-items: stretch;
+}
+
+.fraction-convert-grid > .fraction-card {
+    flex: 1 1 0;
+}
+
+.fraction-decimal-field {
+    max-width: 240px;
+}
+
+@media (max-width: 700px) {
+    .fraction-input-row,
+    .fraction-pair-grid,
+    .fraction-convert-grid {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .fraction-pair-grid-operation {
+        align-items: center;
+    }
+
+    .fraction-operator {
+        transform: none;
+    }
+
+    .fraction-card {
+        width: 100%;
+    }
+}

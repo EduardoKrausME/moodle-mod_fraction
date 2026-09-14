@@ -1,0 +1,134 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_fraction/calculator
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
+<div id="{{rootid}}" class="fraction-calculator" data-region="fraction-calculator">
+    <div class="fraction-tool-note">{{calculateautomatically}}</div>
+
+    <div class="fraction-section" data-tool="simplify">
+        <h3>{{simplify}}</h3>
+        <div class="fraction-input-row">
+            <label class="fraction-field">
+                <span>{{numerator}}</span>
+                <input class="form-control" type="number" step="1" value="18" data-field="simplify-numerator">
+            </label>
+            <span class="fraction-slash" aria-hidden="true">/</span>
+            <label class="fraction-field">
+                <span>{{denominator}}</span>
+                <input class="form-control" type="number" step="1" value="24" data-field="simplify-denominator">
+            </label>
+        </div>
+        <div class="fraction-result" data-result="simplify" aria-live="polite"></div>
+    </div>
+
+    <div class="fraction-section" data-tool="compare">
+        <h3>{{compare}}</h3>
+        <div class="fraction-pair-grid">
+            <fieldset class="fraction-card">
+                <legend>{{fractiona}}</legend>
+                <div class="fraction-stacked-input">
+                    <input class="form-control" type="number" step="1" value="3" data-field="compare-a-numerator" aria-label="{{fractiona}} - {{numerator}}">
+                    <span></span>
+                    <input class="form-control" type="number" step="1" value="4" data-field="compare-a-denominator" aria-label="{{fractiona}} - {{denominator}}">
+                </div>
+            </fieldset>
+            <div class="fraction-operator" data-region="compare-symbol">?</div>
+            <fieldset class="fraction-card">
+                <legend>{{fractionb}}</legend>
+                <div class="fraction-stacked-input">
+                    <input class="form-control" type="number" step="1" value="5" data-field="compare-b-numerator" aria-label="{{fractionb}} - {{numerator}}">
+                    <span></span>
+                    <input class="form-control" type="number" step="1" value="8" data-field="compare-b-denominator" aria-label="{{fractionb}} - {{denominator}}">
+                </div>
+            </fieldset>
+        </div>
+        <div class="fraction-result" data-result="compare" aria-live="polite"></div>
+    </div>
+
+    <div class="fraction-section" data-tool="addsubtract">
+        <h3>{{addsubtract}}</h3>
+        <div class="fraction-operation-tabs" role="group" aria-label="{{addsubtract}}">
+            <button type="button" class="btn btn-secondary active" data-operation="add">{{add}}</button>
+            <button type="button" class="btn btn-secondary" data-operation="subtract">{{subtract}}</button>
+        </div>
+        <div class="fraction-pair-grid fraction-pair-grid-operation">
+            <div class="fraction-stacked-input">
+                <input class="form-control" type="number" step="1" value="2" data-field="addsub-a-numerator" aria-label="{{fractiona}} - {{numerator}}">
+                <span></span>
+                <input class="form-control" type="number" step="1" value="3" data-field="addsub-a-denominator" aria-label="{{fractiona}} - {{denominator}}">
+            </div>
+            <div class="fraction-operator" data-region="addsub-symbol">+</div>
+            <div class="fraction-stacked-input">
+                <input class="form-control" type="number" step="1" value="3" data-field="addsub-b-numerator" aria-label="{{fractionb}} - {{numerator}}">
+                <span></span>
+                <input class="form-control" type="number" step="1" value="4" data-field="addsub-b-denominator" aria-label="{{fractionb}} - {{denominator}}">
+            </div>
+        </div>
+        <div class="fraction-result" data-result="addsubtract" aria-live="polite"></div>
+    </div>
+
+    <div class="fraction-section" data-tool="multiplydivide">
+        <h3>{{multiplydivide}}</h3>
+        <div class="fraction-operation-tabs" role="group" aria-label="{{multiplydivide}}">
+            <button type="button" class="btn btn-secondary active" data-operation="multiply">{{multiply}}</button>
+            <button type="button" class="btn btn-secondary" data-operation="divide">{{divide}}</button>
+        </div>
+        <div class="fraction-pair-grid fraction-pair-grid-operation">
+            <div class="fraction-stacked-input">
+                <input class="form-control" type="number" step="1" value="2" data-field="muldiv-a-numerator" aria-label="{{fractiona}} - {{numerator}}">
+                <span></span>
+                <input class="form-control" type="number" step="1" value="5" data-field="muldiv-a-denominator" aria-label="{{fractiona}} - {{denominator}}">
+            </div>
+            <div class="fraction-operator" data-region="muldiv-symbol">×</div>
+            <div class="fraction-stacked-input">
+                <input class="form-control" type="number" step="1" value="3" data-field="muldiv-b-numerator" aria-label="{{fractionb}} - {{numerator}}">
+                <span></span>
+                <input class="form-control" type="number" step="1" value="7" data-field="muldiv-b-denominator" aria-label="{{fractionb}} - {{denominator}}">
+            </div>
+        </div>
+        <div class="fraction-result" data-result="multiplydivide" aria-live="polite"></div>
+    </div>
+
+    <div class="fraction-section" data-tool="convert">
+        <h3>{{convert}}</h3>
+        <div class="fraction-convert-grid">
+            <div class="fraction-card">
+                <h4>{{fractiontodecimal}}</h4>
+                <div class="fraction-stacked-input fraction-stacked-input-small">
+                    <input class="form-control" type="number" step="1" value="3" data-field="convert-fraction-numerator" aria-label="{{numerator}}">
+                    <span></span>
+                    <input class="form-control" type="number" step="1" value="8" data-field="convert-fraction-denominator" aria-label="{{denominator}}">
+                </div>
+                <div class="fraction-result" data-result="fractiontodecimal" aria-live="polite"></div>
+            </div>
+            <div class="fraction-card">
+                <h4>{{decimaltofraction}}</h4>
+                <label class="fraction-field fraction-decimal-field">
+                    <span>{{decimal}}</span>
+                    <input class="form-control" type="text" inputmode="decimal" value="0,375" data-field="convert-decimal">
+                </label>
+                <div class="fraction-result" data-result="decimaltofraction" aria-live="polite"></div>
+            </div>
+        </div>
+    </div>
+</div>
