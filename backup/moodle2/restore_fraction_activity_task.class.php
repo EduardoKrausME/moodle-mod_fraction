@@ -22,7 +22,9 @@
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . "/restore_fraction_stepslib.php");
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/restore_fraction_stepslib.php');
 
 /**
  * Class restore_fraction_activity_task
