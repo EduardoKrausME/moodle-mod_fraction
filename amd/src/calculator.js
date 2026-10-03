@@ -16,7 +16,7 @@
 /**
  * calculator.js
  *
- * @package   mod_fraction
+ * @module     mod_fraction/calculator
  * @copyright 2026 Eduardo Kraus {@link https://eduardokraus.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -65,7 +65,8 @@ define(["jquery"], function($) {
         return {
             value: value,
             gcd: gcd,
-            formula: string("lcmformula") + "(" + Math.abs(a) + ", " + Math.abs(b) + ") = |" + a + " × " + b + "| ÷ " + gcd.value + " = " + value,
+            formula: string("lcmformula") + "(" + Math.abs(a) + ", " + Math.abs(b) + ") = |" +
+                a + " × " + b + "| ÷ " + gcd.value + " = " + value,
         };
     };
 
@@ -249,7 +250,8 @@ define(["jquery"], function($) {
                 fractionText(rawNumerator, lcm.value),
         ];
         steps.push(string("gcdtitle") + " " + fractionText(rawNumerator, lcm.value) + ": " +
-            (simplified.gcd.steps.length ? simplified.gcd.steps.join("; ") + "; " : "") + string("gcdstep") + ": " + simplified.divisor);
+            (simplified.gcd.steps.length ? simplified.gcd.steps.join("; ") + "; " : "") +
+            string("gcdstep") + ": " + simplified.divisor);
         if (simplified.divisor !== 1) {
             steps.push(string("simplifystep") + ": (" + rawNumerator + " ÷ " + simplified.divisor + ") / (" +
                 lcm.value + " ÷ " + simplified.divisor + ") = " + fractionText(simplified.numerator, simplified.denominator));
@@ -308,8 +310,9 @@ define(["jquery"], function($) {
             string("gcdstep") + ": " + simplified.divisor);
         if (simplified.divisor !== 1) {
             const normalisedRaw = normalise(rawNumerator, rawDenominator);
-            steps.push(string("simplifystep") + ": (" + normalisedRaw.numerator + " ÷ " + simplified.divisor + ") / (" +
-                normalisedRaw.denominator + " ÷ " + simplified.divisor + ") = " + fractionText(simplified.numerator, simplified.denominator));
+            steps.push(string("simplifystep") + ": (" + normalisedRaw.numerator + " ÷ " + simplified.divisor +
+                ") / (" + normalisedRaw.denominator + " ÷ " + simplified.divisor + ") = " +
+                fractionText(simplified.numerator, simplified.denominator));
         } else {
             steps.push(string("alreadysimplified") + ": " + fractionText(simplified.numerator, simplified.denominator));
         }
@@ -415,14 +418,16 @@ define(["jquery"], function($) {
         if (parsed.digits === 0) {
             steps.push(string("decimaltofractionstep") + ": " + parsed.normalised + " = " + parsed.numerator + "/1");
         } else {
-            steps.push(string("decimaltofractionstep") + ": " + parsed.normalised + " = " + parsed.numerator + "/" + parsed.denominator);
+            steps.push(string("decimaltofractionstep") + ": " + parsed.normalised + " = " +
+                parsed.numerator + "/" + parsed.denominator);
             steps.push(string("decimalplacesrule", parsed.digits));
         }
         steps.push(string("gcdtitle") + ": " + (simplified.gcd.steps.length ? simplified.gcd.steps.join("; ") + "; " : "") +
             string("gcdstep") + ": " + simplified.divisor);
         if (simplified.divisor !== 1) {
             steps.push(string("simplifystep") + ": (" + parsed.numerator + " ÷ " + simplified.divisor + ") / (" +
-                parsed.denominator + " ÷ " + simplified.divisor + ") = " + fractionText(simplified.numerator, simplified.denominator));
+                parsed.denominator + " ÷ " + simplified.divisor + ") = " +
+                fractionText(simplified.numerator, simplified.denominator));
         } else {
             steps.push(string("alreadysimplified") + ": " + fractionText(simplified.numerator, simplified.denominator));
         }
