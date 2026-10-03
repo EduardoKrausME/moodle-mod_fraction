@@ -65,7 +65,7 @@ define(["jquery"], function($) {
         return {
             value: value,
             gcd: gcd,
-            formula: "MMC(" + Math.abs(a) + ", " + Math.abs(b) + ") = |" + a + " × " + b + "| ÷ " + gcd.value + " = " + value,
+            formula: string("lcmformula") + "(" + Math.abs(a) + ", " + Math.abs(b) + ") = |" + a + " × " + b + "| ÷ " + gcd.value + " = " + value,
         };
     };
 
@@ -198,7 +198,7 @@ define(["jquery"], function($) {
         const bEquivalent = b.numerator * bFactor;
         const steps = [
             string("crossmultiply") + ": " + a.numerator + " × " + b.denominator + " = " + left +
-                " e " + b.numerator + " × " + a.denominator + " = " + right,
+                " " + string("and") + " " + b.numerator + " × " + a.denominator + " = " + right,
             string("comparisonresult") + ": " + left + " " + symbol + " " + right,
             string("lcmtitle") + ": " + lcm.formula,
             string("equivalent") + ": " + fractionText(a.numerator, a.denominator) + " = " +
@@ -328,7 +328,7 @@ define(["jquery"], function($) {
         const seen = {};
         let repeatAt = -1;
 
-        steps.push(dividend + " ÷ " + divisor + " = " + integerPart + ", resto " + remainder);
+        steps.push(dividend + " ÷ " + divisor + " = " + integerPart + ", " + string("remainder") + " " + remainder);
         for (let i = 0; i < maxDigits && remainder !== 0; i++) {
             if (Object.prototype.hasOwnProperty.call(seen, remainder)) {
                 repeatAt = seen[remainder];
@@ -340,17 +340,18 @@ define(["jquery"], function($) {
             const digit = Math.floor(remainder / divisor);
             const newRemainder = remainder % divisor;
             steps.push(before + " × 10 = " + remainder + "; " + remainder + " ÷ " + divisor + " = " + digit +
-                ", resto " + newRemainder);
+                ", " + string("remainder") + " " + newRemainder);
             digits += String(digit);
             remainder = newRemainder;
         }
 
         let decimal = String(integerPart);
+        const decimalSeparator = string("decimalseparator");
         if (digits.length) {
             if (repeatAt >= 0) {
-                decimal += "," + digits.substring(0, repeatAt) + "(" + digits.substring(repeatAt) + ")";
+                decimal += decimalSeparator + digits.substring(0, repeatAt) + "(" + digits.substring(repeatAt) + ")";
             } else {
-                decimal += "," + digits + (remainder !== 0 ? "…" : "");
+                decimal += decimalSeparator + digits + (remainder !== 0 ? "…" : "");
             }
         }
         if (negative && decimal !== "0") {
@@ -391,11 +392,12 @@ define(["jquery"], function($) {
         const decimalPart = parts[1] || "";
         const denominator = Math.pow(10, decimalPart.length);
         const numerator = Number.parseInt(integerPart + decimalPart, 10) * (negative ? -1 : 1);
+        const decimalSeparator = string("decimalseparator");
         return {
             numerator: numerator,
             denominator: denominator,
             digits: decimalPart.length,
-            normalised: (negative ? "-" : "") + integerPart + (decimalPart.length ? "," + decimalPart : ""),
+            normalised: (negative ? "-" : "") + integerPart + (decimalPart.length ? decimalSeparator + decimalPart : ""),
         };
     };
 
