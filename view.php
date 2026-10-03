@@ -58,6 +58,7 @@ $stringkeys = [
     "multiplynumerators", "multiplydenominators", "reciprocal", "divisionasmultiplication", "decimaldivision",
     "decimaltofractionstep", "signnormalization", "finalresult", "cannotdividebyzero", "comparisonresult",
     "operationresult", "decimalresult", "fractionresult", "gcdstep", "lcmstep", "simplifystep", "decimalplacesrule",
+    "lcmformula", "and", "remainder", "decimalseparator",
 ];
 $PAGE->requires->strings_for_js($stringkeys, "fraction");
 $PAGE->requires->js_call_amd("mod_fraction/calculator", "init", [["rootId" => "mod-fraction-calculator"]]);
