@@ -22,6 +22,8 @@
  * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once(__DIR__ . "/restore_fraction_stepslib.php");
+
 /**
  * Class restore_fraction_activity_task
  */
@@ -44,11 +46,22 @@ class restore_fraction_activity_task extends restore_activity_task {
     }
 
     /**
-     * Method define_decode_contents.
+     * Defines content fields containing links that must be decoded on restore.
      *
-     * @return array Return value.
+     * @return restore_decode_content[]
      */
     public static function define_decode_contents(): array {
+        return [
+            new restore_decode_content("fraction", ["intro"], "fraction"),
+        ];
+    }
+
+    /**
+     * Defines encoded links used by the activity.
+     *
+     * @return restore_decode_rule[]
+     */
+    public static function define_decode_rules(): array {
         return [
             new restore_decode_rule("FRACTIONVIEWBYID", "/mod/fraction/view.php?id=$1", "course_module"),
         ];
