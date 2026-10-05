@@ -23,8 +23,8 @@
  */
 
 defined('MOODLE_INTERNAL') || die;
-$plugin->version = 2026100302;
-$plugin->release = '1.1.3';
+$plugin->version = 2026100500;
+$plugin->release = '1.1.4';
 $plugin->component = "mod_fraction";
 $plugin->requires = 2024100700;
 $plugin->maturity = MATURITY_STABLE;
