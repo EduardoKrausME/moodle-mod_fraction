@@ -65,6 +65,17 @@ $PAGE->requires->js_call_amd("mod_fraction/calculator", "init", [["rootId" => "m
 
 $templatecontext = [
     "rootid" => "mod-fraction-calculator",
+    "modulename" => get_string("modulename", "fraction"),
+    "herodescription" => get_string("herodescription", "fraction"),
+    "featurevisual" => get_string("featurevisual", "fraction"),
+    "featurevisualdescription" => get_string("featurevisualdescription", "fraction"),
+    "featuresteps" => get_string("featuresteps", "fraction"),
+    "featurestepsdescription" => get_string("featurestepsdescription", "fraction"),
+    "featureoperations" => get_string("featureoperations", "fraction"),
+    "featureoperationsdescription" => get_string("featureoperationsdescription", "fraction"),
+    "selectoperation" => get_string("selectoperation", "fraction"),
+    "visualrepresentation" => get_string("visualrepresentation", "fraction"),
+    "visualresult" => get_string("visualresult", "fraction"),
     "simplify" => get_string("simplify", "fraction"),
     "compare" => get_string("compare", "fraction"),
     "addsubtract" => get_string("addsubtract", "fraction"),

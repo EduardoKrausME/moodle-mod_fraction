@@ -23,9 +23,46 @@
     }
 }}
 <div id="{{rootid}}" class="fraction-calculator" data-region="fraction-calculator">
-    <div class="fraction-tool-note">{{calculateautomatically}}</div>
+    <aside class="fraction-hero">
+        <div class="fraction-brand">
+            <div class="fraction-brand-icon" aria-hidden="true"><span>1</span><i></i><span>2</span></div>
+            <h2>{{modulename}}</h2>
+        </div>
+        <p class="fraction-hero-description">{{herodescription}}</p>
+        <div class="fraction-feature-list">
+            <div class="fraction-feature">
+                <div class="fraction-feature-icon fraction-feature-visual" aria-hidden="true">◕</div>
+                <div><strong>{{featurevisual}}</strong><p>{{featurevisualdescription}}</p></div>
+            </div>
+            <div class="fraction-feature">
+                <div class="fraction-feature-icon fraction-feature-steps" aria-hidden="true">≡</div>
+                <div><strong>{{featuresteps}}</strong><p>{{featurestepsdescription}}</p></div>
+            </div>
+            <div class="fraction-feature">
+                <div class="fraction-feature-icon fraction-feature-operations" aria-hidden="true">▥</div>
+                <div><strong>{{featureoperations}}</strong><p>{{featureoperationsdescription}}</p></div>
+            </div>
+        </div>
+    </aside>
+    <main class="fraction-workspace">
+        <header class="fraction-workspace-header">
+            <div>
+                <h2 data-active-title>{{add}}</h2>
+                <p>{{calculateautomatically}}</p>
+            </div>
+            <nav class="fraction-mode-tabs" aria-label="{{selectoperation}}">
+                <button type="button" class="fraction-mode-button is-active" data-mode="add" aria-pressed="true">{{add}}</button>
+                <button type="button" class="fraction-mode-button" data-mode="subtract" aria-pressed="false">{{subtract}}</button>
+                <button type="button" class="fraction-mode-button" data-mode="multiply" aria-pressed="false">{{multiply}}</button>
+                <button type="button" class="fraction-mode-button" data-mode="divide" aria-pressed="false">{{divide}}</button>
+                <button type="button" class="fraction-mode-button" data-mode="compare" aria-pressed="false">{{compare}}</button>
+                <button type="button" class="fraction-mode-button" data-mode="simplify" aria-pressed="false">{{simplify}}</button>
+                <button type="button" class="fraction-mode-button" data-mode="convert" aria-pressed="false">{{convert}}</button>
+            </nav>
+        </header>
+        <div class="fraction-tool-content">
 
-    <div class="fraction-section" data-tool="simplify">
+    <div class="fraction-section" data-tool="simplify" hidden>
         <h3>{{simplify}}</h3>
         <div class="fraction-input-row">
             <label class="fraction-field">
@@ -38,10 +75,22 @@
                 <input class="form-control" type="number" step="1" value="24" data-field="simplify-denominator">
             </label>
         </div>
+
+        <div class="fraction-visuals">
+            <h4>{{visualrepresentation}}</h4>
+            <div class="fraction-visual-grid fraction-visual-grid-single">
+                <div class="fraction-visual-card"><div data-bar="a"></div></div>
+            </div>
+        </div>
         <div class="fraction-result" data-result="simplify" aria-live="polite"></div>
+
+        <div class="fraction-visual-outcome">
+            <h4>{{visualresult}}</h4>
+            <div data-bar="result"></div>
+        </div>
     </div>
 
-    <div class="fraction-section" data-tool="compare">
+    <div class="fraction-section" data-tool="compare" hidden>
         <h3>{{compare}}</h3>
         <div class="fraction-pair-grid">
             <fieldset class="fraction-card">
@@ -62,6 +111,20 @@
                 </div>
             </fieldset>
         </div>
+
+        <div class="fraction-visuals">
+            <h4>{{visualrepresentation}}</h4>
+            <div class="fraction-visual-grid">
+                <div class="fraction-visual-card">
+                    <span class="fraction-visual-caption">{{fractiona}}</span>
+                    <div data-bar="a"></div>
+                </div>
+                <div class="fraction-visual-card">
+                    <span class="fraction-visual-caption">{{fractionb}}</span>
+                    <div data-bar="b"></div>
+                </div>
+            </div>
+        </div>
         <div class="fraction-result" data-result="compare" aria-live="polite"></div>
     </div>
 
@@ -73,21 +136,40 @@
         </div>
         <div class="fraction-pair-grid fraction-pair-grid-operation">
             <div class="fraction-stacked-input">
-                <input class="form-control" type="number" step="1" value="2" data-field="addsub-a-numerator" aria-label="{{fractiona}} - {{numerator}}">
+                <input class="form-control" type="number" step="1" value="3" data-field="addsub-a-numerator" aria-label="{{fractiona}} - {{numerator}}">
                 <span></span>
-                <input class="form-control" type="number" step="1" value="3" data-field="addsub-a-denominator" aria-label="{{fractiona}} - {{denominator}}">
+                <input class="form-control" type="number" step="1" value="4" data-field="addsub-a-denominator" aria-label="{{fractiona}} - {{denominator}}">
             </div>
             <div class="fraction-operator" data-region="addsub-symbol">+</div>
             <div class="fraction-stacked-input">
-                <input class="form-control" type="number" step="1" value="3" data-field="addsub-b-numerator" aria-label="{{fractionb}} - {{numerator}}">
+                <input class="form-control" type="number" step="1" value="2" data-field="addsub-b-numerator" aria-label="{{fractionb}} - {{numerator}}">
                 <span></span>
-                <input class="form-control" type="number" step="1" value="4" data-field="addsub-b-denominator" aria-label="{{fractionb}} - {{denominator}}">
+                <input class="form-control" type="number" step="1" value="3" data-field="addsub-b-denominator" aria-label="{{fractionb}} - {{denominator}}">
+            </div>
+        </div>
+
+        <div class="fraction-visuals">
+            <h4>{{visualrepresentation}}</h4>
+            <div class="fraction-visual-grid">
+                <div class="fraction-visual-card">
+                    <span class="fraction-visual-caption">{{fractiona}}</span>
+                    <div data-bar="a"></div>
+                </div>
+                <div class="fraction-visual-card">
+                    <span class="fraction-visual-caption">{{fractionb}}</span>
+                    <div data-bar="b"></div>
+                </div>
             </div>
         </div>
         <div class="fraction-result" data-result="addsubtract" aria-live="polite"></div>
+
+        <div class="fraction-visual-outcome">
+            <h4>{{visualresult}}</h4>
+            <div data-bar="result"></div>
+        </div>
     </div>
 
-    <div class="fraction-section" data-tool="multiplydivide">
+    <div class="fraction-section" data-tool="multiplydivide" hidden>
         <h3>{{multiplydivide}}</h3>
         <div class="fraction-operation-tabs" role="group" aria-label="{{multiplydivide}}">
             <button type="button" class="btn btn-secondary active" data-operation="multiply">{{multiply}}</button>
@@ -106,10 +188,29 @@
                 <input class="form-control" type="number" step="1" value="7" data-field="muldiv-b-denominator" aria-label="{{fractionb}} - {{denominator}}">
             </div>
         </div>
+
+        <div class="fraction-visuals">
+            <h4>{{visualrepresentation}}</h4>
+            <div class="fraction-visual-grid">
+                <div class="fraction-visual-card">
+                    <span class="fraction-visual-caption">{{fractiona}}</span>
+                    <div data-bar="a"></div>
+                </div>
+                <div class="fraction-visual-card">
+                    <span class="fraction-visual-caption">{{fractionb}}</span>
+                    <div data-bar="b"></div>
+                </div>
+            </div>
+        </div>
         <div class="fraction-result" data-result="multiplydivide" aria-live="polite"></div>
+
+        <div class="fraction-visual-outcome">
+            <h4>{{visualresult}}</h4>
+            <div data-bar="result"></div>
+        </div>
     </div>
 
-    <div class="fraction-section" data-tool="convert">
+    <div class="fraction-section" data-tool="convert" hidden>
         <h3>{{convert}}</h3>
         <div class="fraction-convert-grid">
             <div class="fraction-card">
@@ -131,4 +232,6 @@
             </div>
         </div>
     </div>
+        </div>
+    </main>
 </div>

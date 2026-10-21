@@ -93,15 +93,25 @@ define(["jquery"], function($) {
     };
 
     const resultHtml = function(answer, steps, extraClass) {
-        let html = '<div class="fraction-answer ' + (extraClass || "") + '"><span>' +
-            escapeHtml(string("result")) + ':</span><span class="fraction-answer-value">' + escapeHtml(answer) + "</span></div>";
+        let html = "";
         if (steps.length) {
-            html += '<div class="fraction-steps-title">' + escapeHtml(string("steps")) + ':<\/div><ol class="fraction-steps">';
+            html += '<div class="fraction-steps-title">' + escapeHtml(string("steps")) + '</div>';
+            html += '<ol class="fraction-steps">';
             steps.forEach(function(step) {
-                html += "<li>" + escapeHtml(step) + "</li>";
+                const separator = step.indexOf(":");
+                const title = separator >= 0 ? step.substring(0, separator).trim() : step;
+                const details = separator >= 0 ? step.substring(separator + 1).trim() : "";
+                html += '<li><strong class="fraction-step-label">' + escapeHtml(title) + '</strong>';
+                if (details) {
+                    html += '<span class="fraction-step-detail">' + escapeHtml(details) + '</span>';
+                }
+                html += '</li>';
             });
-            html += "</ol>";
+            html += '</ol>';
         }
+        html += '<div class="fraction-answer ' + (extraClass || "") + '"><span>' +
+            escapeHtml(string("result")) + '</span><span class="fraction-answer-value">' +
+            escapeHtml(answer) + '</span></div>';
         return html;
     };
 
@@ -445,24 +455,207 @@ define(["jquery"], function($) {
         calculateDecimalToFraction(root);
     };
 
+    /**
+     * Render a fraction as individually divided parts. Large values use a
+     * proportional meter so user input never produces thousands of DOM nodes.
+     *
+     * @param {HTMLElement|null} target Bar container.
+     * @param {number} numerator Fraction numerator.
+     * @param {number} denominator Fraction denominator.
+     * @param {string} kind One of a, b, or result.
+     */
+    const renderFractionBar = function(target, numerator, denominator, kind) {
+        if (!target) {
+            return;
+        }
+        target.replaceChildren();
+        if (!Number.isSafeInteger(numerator) || !Number.isSafeInteger(denominator) || denominator === 0) {
+            return;
+        }
+        const fraction = normalise(numerator, denominator);
+        const parts = fraction.denominator;
+        const filled = Math.abs(fraction.numerator);
+        const expression = document.createElement("div");
+        expression.className = "fraction-bar-expression";
+        expression.textContent = fraction.numerator + "/" + parts;
+        target.appendChild(expression);
+
+        const track = document.createElement("div");
+        track.className = "fraction-bar-track";
+        track.setAttribute("role", "img");
+        track.setAttribute("aria-label", expression.textContent);
+        const total = Math.max(parts, filled);
+        if (total <= 48 && parts <= 24) {
+            for (let index = 0; index < total; index++) {
+                const cell = document.createElement("span");
+                cell.className = "fraction-bar-cell";
+                if (index < filled) {
+                    if (kind === "result" && index < parts && filled > parts) {
+                        cell.classList.add("is-whole");
+                    } else {
+                        cell.classList.add("is-filled-" + kind);
+                    }
+                }
+                track.appendChild(cell);
+            }
+        } else {
+            const meter = document.createElement("span");
+            meter.className = "fraction-bar-meter";
+            meter.style.width = Math.min(100, filled / parts * 100) + "%";
+            track.appendChild(meter);
+        }
+        target.appendChild(track);
+
+        if (fraction.numerator < 0) {
+            const sign = document.createElement("div");
+            sign.className = "fraction-bar-negative";
+            sign.textContent = "−";
+            target.appendChild(sign);
+        }
+        if (filled >= parts) {
+            const whole = Math.floor(filled / parts);
+            const remainder = filled % parts;
+            const summary = document.createElement("div");
+            summary.className = "fraction-bar-summary";
+            summary.textContent = (fraction.numerator < 0 ? "−" : "") + whole +
+                (remainder ? " " + remainder + "/" + parts : "");
+            target.appendChild(summary);
+        }
+    };
+
+    /**
+     * Refresh diagrams from the same inputs used by the arithmetic engine.
+     * A hidden operation is still calculated but only the selected tool is shown.
+     *
+     * @param {Object} root Calculator jQuery object.
+     */
+    const renderVisuals = function(root) {
+        const container = root[0];
+        const getBar = function(tool, name) {
+            const section = container.querySelector('[data-tool="' + tool + '"]');
+            return section ? section.querySelector('[data-bar="' + name + '"]') : null;
+        };
+        const renderPair = function(tool, prefix) {
+            const an = integerValue(root, prefix + "-a-numerator");
+            const ad = integerValue(root, prefix + "-a-denominator");
+            const bn = integerValue(root, prefix + "-b-numerator");
+            const bd = integerValue(root, prefix + "-b-denominator");
+            renderFractionBar(getBar(tool, "a"), an, ad, "a");
+            renderFractionBar(getBar(tool, "b"), bn, bd, "b");
+            return {an: an, ad: ad, bn: bn, bd: bd, valid:
+                an !== null && ad !== null && bn !== null && bd !== null && ad !== 0 && bd !== 0};
+        };
+        const simplifyNumerator = integerValue(root, "simplify-numerator");
+        const simplifyDenominator = integerValue(root, "simplify-denominator");
+        renderFractionBar(getBar("simplify", "a"), simplifyNumerator, simplifyDenominator, "a");
+        if (simplifyNumerator !== null && simplifyDenominator !== null && simplifyDenominator !== 0) {
+            const simplified = simplifyFraction(simplifyNumerator, simplifyDenominator);
+            renderFractionBar(getBar("simplify", "result"), simplified.numerator, simplified.denominator, "result");
+        } else {
+            renderFractionBar(getBar("simplify", "result"), null, null, "result");
+        }
+
+        renderPair("compare", "compare");
+        const addition = renderPair("addsubtract", "addsub");
+        if (addition.valid) {
+            const operation = container.querySelector('[data-tool="addsubtract"] [data-operation].active');
+            const multiplier = operation && operation.dataset.operation === "subtract" ? -1 : 1;
+            const result = simplifyFraction(addition.an * addition.bd +
+                multiplier * addition.bn * addition.ad, addition.ad * addition.bd);
+            renderFractionBar(getBar("addsubtract", "result"), result.numerator, result.denominator, "result");
+        } else {
+            renderFractionBar(getBar("addsubtract", "result"), null, null, "result");
+        }
+
+        const multiplication = renderPair("multiplydivide", "muldiv");
+        const operation = container.querySelector('[data-tool="multiplydivide"] [data-operation].active');
+        const division = operation && operation.dataset.operation === "divide";
+        if (multiplication.valid && (!division || multiplication.bn !== 0)) {
+            const numerator = division ?
+                multiplication.an * multiplication.bd : multiplication.an * multiplication.bn;
+            const denominator = division ?
+                multiplication.ad * multiplication.bn : multiplication.ad * multiplication.bd;
+            const result = simplifyFraction(numerator, denominator);
+            renderFractionBar(getBar("multiplydivide", "result"), result.numerator, result.denominator, "result");
+        } else {
+            renderFractionBar(getBar("multiplydivide", "result"), null, null, "result");
+        }
+    };
+
+    /**
+     * Switch the visible lesson without destroying inputs or calculation state.
+     *
+     * @param {Object} root Calculator jQuery object.
+     * @param {string} mode Requested operation.
+     */
+    const activateMode = function(root, mode) {
+        const modeTools = {
+            add: "addsubtract",
+            subtract: "addsubtract",
+            multiply: "multiplydivide",
+            divide: "multiplydivide",
+            compare: "compare",
+            simplify: "simplify",
+            convert: "convert",
+        };
+        const selected = root[0].querySelector('[data-mode="' + mode + '"]');
+        if (!selected || !Object.prototype.hasOwnProperty.call(modeTools, mode)) {
+            return;
+        }
+        root[0].querySelectorAll("[data-tool]").forEach(function(section) {
+            section.hidden = section.dataset.tool !== modeTools[mode];
+        });
+        root[0].querySelectorAll("[data-mode]").forEach(function(button) {
+            const active = button === selected;
+            button.classList.toggle("is-active", active);
+            button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        const operation = root[0].querySelector('[data-operation="' + mode + '"]');
+        if (operation) {
+            operation.parentElement.querySelectorAll("[data-operation]").forEach(function(button) {
+                button.classList.toggle("active", button === operation);
+            });
+        }
+        root[0].querySelector("[data-active-title]").textContent = selected.textContent.trim();
+        calculateAll(root);
+        renderVisuals(root);
+    };
+
     const init = function(config) {
         const root = $("#" + config.rootId);
         if (!root.length) {
             return;
         }
 
-        root.on("input change", "input", function() {
+        const recalculate = function() {
             calculateAll(root);
+            renderVisuals(root);
+        };
+        root[0].addEventListener("input", function(event) {
+            if (event.target.matches("input")) {
+                recalculate();
+            }
         });
-
-        root.on("click", "[data-operation]", function() {
-            const button = $(this);
-            button.closest(".fraction-operation-tabs").find("[data-operation]").removeClass("active");
-            button.addClass("active");
-            calculateAll(root);
+        root[0].addEventListener("change", function(event) {
+            if (event.target.matches("input")) {
+                recalculate();
+            }
         });
-
-        calculateAll(root);
+        root[0].addEventListener("click", function(event) {
+            const mode = event.target.closest("[data-mode]");
+            if (mode && root[0].contains(mode)) {
+                activateMode(root, mode.dataset.mode);
+                return;
+            }
+            const button = event.target.closest("[data-operation]");
+            if (button && root[0].contains(button)) {
+                button.parentElement.querySelectorAll("[data-operation]").forEach(function(other) {
+                    other.classList.toggle("active", other === button);
+                });
+                recalculate();
+            }
+        });
+        activateMode(root, "add");
     };
 
     return {init: init};
